@@ -10,9 +10,8 @@ const links = [
 export default function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 md:px-10">
-      <a href="#top" className="font-display text-2xl tracking-tight">
-        Ink<span className="italic text-neon">Lusion</span>
-        <span className="sr-only">{site.name}</span>
+      <a href="#top" className="label !text-ink" aria-label={site.name}>
+        IL<span className="text-neon"> ✦</span>
       </a>
       <nav className="hidden gap-9 md:flex">
         {links.map(([name, href]) => (

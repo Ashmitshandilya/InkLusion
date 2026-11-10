@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { wa } from "@/content/site";
 import { interests, placements, tones, suggest, type Interest, type Placement, type Tone } from "@/lib/ideas";
 
 function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -32,18 +33,18 @@ export default function IdeaTeaser() {
         <div className="md:col-span-6">
           <p className="label mb-6">Idea finder</p>
           <h2 className="font-display text-6xl leading-[0.95] md:text-8xl">
-            Not sure what
+            Stuck on
             <br />
-            to <span className="glow italic text-neon">get?</span>
+            what to <span className="glow italic text-neon">get?</span>
           </h2>
           <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
-            Three taps. We point you to a direction that suits you and your skin. The design itself is
-            always drawn for you.
+            Pick three things. You get a style to look into and why it fits that spot. Shaurya draws the
+            actual design.
           </p>
 
           <div className="mt-12 space-y-8">
             <fieldset>
-              <legend className="label mb-3">I am drawn to</legend>
+              <legend className="label mb-3">I like</legend>
               <div className="flex flex-wrap gap-2">
                 {interests.map((v) => (
                   <Chip key={v} on={v === interest} onClick={() => setInterest(v)}>
@@ -84,7 +85,7 @@ export default function IdeaTeaser() {
         </div>
 
         <div className="md:col-span-5 md:col-start-8 md:pt-16" aria-live="polite">
-          <p className="label mb-6">Your direction</p>
+          <p className="label mb-6">Look into</p>
           <div className="space-y-4">
             {results.map((r, i) => (
               <article key={r.style} className="border border-line bg-panel p-6 md:p-8">
@@ -95,8 +96,15 @@ export default function IdeaTeaser() {
               </article>
             ))}
           </div>
-          <a href="#book" className="btn mt-8">
-            Take this to a booking
+          <a
+            href={wa(
+              `Hi Shaurya, I used the idea finder on your site.\nI like: ${interest}\nPlacement: ${placement}\nSuggested: ${results.map((r) => r.style).join(" / ")}\nCan we talk about a design?`,
+            )}
+            target="_blank"
+            rel="noreferrer"
+            className="btn mt-8"
+          >
+            Send this to Shaurya
           </a>
         </div>
       </div>

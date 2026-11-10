@@ -1,4 +1,5 @@
 import SmoothScroll from "@/components/SmoothScroll";
+import InkCanvas from "@/components/InkCanvas";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Story from "@/components/Story";
@@ -11,8 +12,9 @@ export default function Home() {
   return (
     <>
       <SmoothScroll />
+      <InkCanvas />
       <Nav />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <Story />
         <Process />

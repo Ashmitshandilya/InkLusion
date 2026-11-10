@@ -31,7 +31,7 @@ export default function Work() {
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden pt-16">
         <div className="mb-8 flex items-end justify-between px-5 md:px-10">
           <h2 className="font-display text-6xl leading-none md:text-8xl">
-            Selected <span className="italic text-neon">work</span>
+            Recent <span className="italic text-neon">work</span>
           </h2>
           <p className="label hidden md:block">Scroll →</p>
         </div>
@@ -52,8 +52,8 @@ export default function Work() {
             </figure>
           ))}
           <div className="flex w-[60vw] shrink-0 flex-col justify-center md:w-[24vw]">
-            <p className="font-display text-4xl leading-tight">The full gallery opens with the next build.</p>
-            <p className="label mt-4">Filter by style and placement</p>
+            <p className="font-display text-4xl leading-tight">Full gallery is coming.</p>
+            <p className="label mt-4">Sort by style and placement</p>
           </div>
         </div>
       </div>

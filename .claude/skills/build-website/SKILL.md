@@ -36,8 +36,18 @@ Do not wait for assets: build with labelled placeholders.
 - All copy, images and prices live in `src/content/site.ts`. Missing assets render as labelled placeholders,
   so real content is a one-file swap.
 - Premium + minimal: one accent colour, strong type, scroll animation with purpose, fast on mobile.
+- Aim high, not safe: every project gets one signature visual idea that belongs to that business
+  (InkLusion: eclipse + ink nebula, a tattoo that draws itself). No template look, no cartoon look.
+- Copy must not read as AI. Rules:
+  - Facts before slogans: name, city, training, what happens, what it costs. The brand name is the headline.
+  - Write how the owner talks: first person for a solo artist, short plain sentences, local detail.
+  - Banned: paired slogans ("Your X. Your Y."), "every piece tells a story", "journey", "canvas",
+    "elevate", "crafted", "more than just", rule-of-three lists, anything a competitor could also say.
+  - Never invent biography or promises. Unconfirmed lines are marked DRAFT in `site.ts` and listed for
+    the client to approve.
 - Verify before showing: `npm run build`, `npm run lint`, screenshots at 1440px and 390px. Look at them.
-- Checkpoint: show screenshots, ask for feedback. Stop here until the user answers.
+- Checkpoint: show screenshots, say how to view it (local commands + preview link if one exists),
+  ask for feedback. Stop here until the user answers.
 
 ## Phase 4 — Inner site + backend
 Confirm the feature list in one message (propose defaults from the brief, user just says yes / edits).
@@ -54,6 +64,11 @@ Supabase project → run schema → Vercel import with env vars → smoke test t
 Domain is bought later; note where to connect it.
 
 ## Always
+- This workflow is the default for all of Ashmit's work with Claude. Improve it as we learn: when
+  feedback shows a gap, fix the work and add the lesson here in the same session.
+- Contact details given by the user go straight into `site.ts`; make buttons work with them at once
+  (WhatsApp link with a pre-typed message beats a dead "coming soon" button).
+- Supabase: the `sb_publishable_...` key is the anon key. It goes in `.env.example`; secret keys never enter the repo.
 - Branches: `main` = live, `dev` = work in progress. Commit small, push at the end of every session.
 - End every session by updating `docs/status.md`: done, next, waiting-on-user. Start every session by reading it.
 - Never edit or "improve" a client's real work photos beyond crop, light and background — no generated detail.

@@ -2,21 +2,31 @@
  * Everything the client can change lives here.
  * Images: drop files in /public/artist or /public/work and set `src`.
  * While `src` is empty the site shows a labelled placeholder.
+ *
+ * Copy rule: plain and specific. Facts and the artist's own voice, no slogans.
  */
 
 export const site = {
   name: "InkLusion",
-  tagline: "Tattoos with a story",
+  tagline: "Tattoo studio in Roorkee",
   description:
-    "Custom tattoos, drawn for you and nobody else. See the work, find your direction, book a slot.",
-  city: "", // TODO: city
-  contact: { instagram: "", whatsapp: "", email: "" }, // TODO
+    "InkLusion is Shaurya's tattoo studio in Roorkee, Uttarakhand. Custom tattoos, drawn by hand. See the work and book on WhatsApp.",
+  city: "Roorkee, Uttarakhand",
+  contact: {
+    whatsapp: "916398330495",
+    whatsappDisplay: "+91 63983 30495",
+    instagram: "https://www.instagram.com/inklusiontattoo___",
+    instagramHandle: "@inklusiontattoo___",
+    email: "", // TODO
+  },
 };
 
+/** WhatsApp link with the message already typed. */
+export const wa = (text: string) => `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(text)}`;
+
 export const hero = {
-  eyebrow: "Custom tattoo studio",
-  lines: ["Your skin.", "Your story."],
-  sub: "Every piece starts as a conversation and ends as something only you wear.",
+  eyebrow: "Tattoo studio · Roorkee, Uttarakhand",
+  sub: "Custom tattoos by Shaurya, trained at Aliens Tattoo School, Mumbai.",
 };
 
 export const styles = [
@@ -25,30 +35,33 @@ export const styles = [
   "Realism",
   "Botanical",
   "Dotwork",
-  "Neo-traditional",
+  "Portraits",
   "Script",
-  "Geometric",
+  "Cover-ups",
 ];
 
-/** PLACEHOLDER story — replace with the artist's answers (docs/artist-questionnaire.md). */
+/**
+ * DRAFT in the artist's voice. Only the Mumbai training and the Roorkee studio are confirmed.
+ * Replace with his own answers (docs/artist-questionnaire.md) before going live.
+ */
 export const story = {
-  artist: "The artist", // TODO: name
+  artist: "Shaurya",
   portrait: "", // e.g. "/artist/portrait.jpg"
   chapters: [
     {
       no: "01",
-      title: "The first line",
-      text: "It started with a pen and the back of a school notebook. Long before the machine, there was the need to draw on everything in reach.",
+      title: "Mumbai",
+      text: "I trained at Aliens Tattoo School in Mumbai. Months on practice skin before I was allowed near anyone's arm.",
     },
     {
       no: "02",
-      title: "Learning the craft",
-      text: "Years of practice skin, patient mentors and steady hands. Thousands of lines pulled before the first one that stayed on someone forever.",
+      title: "Roorkee",
+      text: "Then I opened InkLusion in Roorkee. You shouldn't need a train to Delhi to get a tattoo done properly.",
     },
     {
       no: "03",
-      title: "Why it matters",
-      text: "A tattoo is trust made permanent. So every piece is drawn from scratch, for one person, and never repeated.",
+      title: "How I work",
+      text: "I draw your tattoo myself. If I think an idea won't age well on that spot, I'll say so before we start.",
     },
   ],
 };
@@ -57,27 +70,27 @@ export const process = [
   {
     no: "01",
     title: "Talk",
-    text: "You bring an idea, a feeling or just a placement. We talk through meaning, size and budget.",
+    text: "Message me on WhatsApp or walk in. Tell me the idea, where you want it and what you want to spend.",
   },
   {
     no: "02",
     title: "Sketch",
-    text: "Your piece is drawn from scratch and refined with you until it feels right.",
+    text: "I draw it. You see the drawing before the day and can ask for changes.",
   },
   {
     no: "03",
     title: "Stencil",
-    text: "The design goes on your skin in violet first. We move it until it sits perfectly with your body.",
+    text: "The outline goes on your skin in purple first. We move it around until the position is right.",
   },
   {
     no: "04",
     title: "Ink",
-    text: "Sterile setup, single-use needles, steady hands. Breaks whenever you need them.",
+    text: "New needle, opened in front of you. Say the word if you need a break.",
   },
   {
     no: "05",
     title: "Heal",
-    text: "You leave with clear aftercare and a free touch-up once it has settled.",
+    text: "You go home with aftercare steps on WhatsApp. If a spot heals patchy, come back and I'll fix it.",
   },
 ];
 
@@ -92,13 +105,13 @@ export const work = [
 ];
 
 export const booking = {
-  heading: ["Ready when", "you are."],
-  text: "Pick a slot, tell us the idea, and we will reply with a quote.",
+  text: "Send your idea and where you want it. You'll get a price and a date back.",
+  message: "Hi Shaurya, I want to book a tattoo.\nIdea: \nPlacement: \nSize: ",
   // TODO: real starting prices
   prices: [
     { label: "Small", note: "up to 5 cm", from: "—" },
     { label: "Medium", note: "palm size", from: "—" },
     { label: "Large", note: "half sleeve and up", from: "—" },
   ],
-  negotiable: "Prices are starting points. Every quote is open to a conversation.",
+  negotiable: "These are starting prices. Size, detail and placement change the quote, and there is room to talk.",
 };

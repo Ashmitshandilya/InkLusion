@@ -6,7 +6,7 @@ description: Ashmit's standard workflow for building software with a website (we
 # Software + website workflow
 
 Same rules of conduct as `build-website` (short chat, no repeated questions, `docs/status.md` as memory,
-`main` = live / `dev` = work, local first, go live only after approval). Differences below.
+`main` = live / `dev` = work, local first, go live only after approval). The copy rules and the "aim high, not safe" rule from `build-website` apply here too. Differences below.
 
 ## Phase 0 — Intake (one message, only what is missing)
 1. Who uses it and the one job it does for them

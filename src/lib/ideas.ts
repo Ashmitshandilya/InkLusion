@@ -50,21 +50,21 @@ const byInterest: Record<Interest, { style: string; idea: string }[]> = {
 };
 
 const placementNote: Record<Placement, string> = {
-  Forearm: "The forearm is a long, flat canvas: vertical pieces read best and you see them every day.",
+  Forearm: "The forearm is long and flat, so tall designs fit it, and you'll see it every day.",
   "Upper arm": "The upper arm takes round, medium pieces well and is easy to cover or show.",
   Calf: "The calf suits tall compositions that wrap slightly, like scenes and botanicals.",
   Thigh: "The thigh gives the most room for detail and is one of the easier spots to sit for.",
-  Back: "The back is the biggest canvas: go larger and symmetric, it carries detail for decades.",
-  Ribs: "Ribs suit flowing, light pieces. It is a tender spot, so shorter sessions work better.",
+  Back: "The back has the most space. Go big, detail holds there for decades.",
+  Ribs: "Ribs hurt more than most spots. Lighter designs and shorter sittings are easier.",
   Hand: "Hands fade faster: bolder lines and simpler shapes hold up best.",
   Neck: "The neck is always visible: small, bold and simple ages best there.",
 };
 
 const toneNote: Record<Tone, string> = {
   light: "On lighter skin, fine lines and soft grey shading show clearly.",
-  medium: "On medium skin, black and grey reads beautifully; keep fine lines a touch bolder.",
+  medium: "On medium skin, black and grey works well. Fine lines should be a little thicker.",
   tan: "On tan skin, strong outlines and clear contrast keep the piece crisp as it heals.",
-  deep: "On deeper skin, bold black, open spacing and high contrast look striking and age best.",
+  deep: "On deeper skin, bold black with open spacing shows up clearly and holds for years.",
 };
 
 export function suggest(interest: Interest, placement: Placement, tone: Tone): Direction[] {

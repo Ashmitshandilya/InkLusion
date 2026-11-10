@@ -17,4 +17,4 @@ Local version first, final check, then live.
 ## Waiting on
 - Artist story (answers to `docs/artist-questionnaire.md`)
 - Artist's tattoo photos (to be cleaned up: crop, light, background matched to the theme — no altering the tattoo itself)
-- Studio name spelling, city, contact (WhatsApp / Instagram / email), price starting points
+- Prices, email. Have: Roorkee (Uttarakhand), WhatsApp, studio Instagram, trained at Aliens Tattoo School Mumbai
