@@ -63,6 +63,12 @@ Report the result as a short pass/fail list.
 Supabase project → run schema → Vercel import with env vars → smoke test the live URL.
 Domain is bought later; note where to connect it.
 
+## Social content (reels)
+When the client sends footage: `reels/reel.py` (copy the `reels/` folder into new projects).
+Ask only for: song + BPM (or a short audio clip for timing), hook line, what the reveal is.
+Never bake copyrighted songs into posted files; the song is added inside Instagram.
+Footage of the client's work is never altered beyond cut, grade, speed and text.
+
 ## Always
 - This workflow is the default for all of Ashmit's work with Claude. Improve it as we learn: when
   feedback shows a gap, fix the work and add the lesson here in the same session.

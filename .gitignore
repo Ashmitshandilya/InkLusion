@@ -40,3 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 !.env.example
+
+# reels: footage and renders stay local
+/reels/raw/*
+!/reels/raw/.gitkeep
+/reels/out/
