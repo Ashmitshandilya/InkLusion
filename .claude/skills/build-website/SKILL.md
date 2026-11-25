@@ -64,10 +64,12 @@ Supabase project → run schema → Vercel import with env vars → smoke test t
 Domain is bought later; note where to connect it.
 
 ## Social content (reels)
-When the client sends footage: `reels/reel.py` (copy the `reels/` folder into new projects).
-Ask only for: song + BPM (or a short audio clip for timing), hook line, what the reveal is.
-Never bake copyrighted songs into posted files; the song is added inside Instagram.
-Footage of the client's work is never altered beyond cut, grade, speed and text.
+Reel system lives in `reels/` (copy the folder into new projects, edit `brand.json`).
+Client drops photos/videos in `reels/inbox/media`, songs in `reels/inbox/music`, runs `npm run reels`:
+every style × every song, beat-synced, with music + silent copies, contact sheet, manifest.
+Ask only for: the footage, the songs, captions they want (file names in [brackets]).
+Never alter the client's work beyond cut, crop, grade, speed and text. Before changing the engine,
+run `reels/tests/` (beat accuracy + sync in finished reels) and keep the numbers in the README true.
 
 ## Always
 - This workflow is the default for all of Ashmit's work with Claude. Improve it as we learn: when

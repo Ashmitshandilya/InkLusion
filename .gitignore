@@ -41,7 +41,13 @@ yarn-error.log*
 next-env.d.ts
 !.env.example
 
-# reels: footage and renders stay local
-/reels/raw/*
-!/reels/raw/.gitkeep
+
+# reels: footage, music, renders and caches stay on the machine
+/reels/.venv/
+/reels/cache/
 /reels/out/
+/reels/inbox/media/*
+/reels/inbox/music/*
+!/reels/inbox/media/.gitkeep
+!/reels/inbox/music/.gitkeep
+__pycache__/

@@ -1,0 +1,31 @@
+{
+  "name": "InkLusion",
+  "wordmark": ["Ink", "Lusion"],
+  "tag": "TATTOO STUDIO  ·  ROORKEE",
+  "line": "Book on WhatsApp  ·  63983 30495",
+  "handle": "@inklusiontattoo___",
+  "colors": {
+    "accent": "#ff2bd6",
+    "ink": "#f4eef2",
+    "muted": "#a0969e",
+    "violet": "#5c2ef2",
+    "bg": "#050505"
+  },
+  "fonts": {
+    "serif": "InstrumentSerif-Regular.woff",
+    "serif_italic": "InstrumentSerif-Italic.woff",
+    "sans": "Geist-Regular.ttf",
+    "mono": "GeistMono-Regular.ttf"
+  },
+  "hooks": [
+    "Today's session",
+    "Stencil to finish",
+    "Fresh from the chair",
+    "Start to finish"
+  ],
+  "story_lines": [
+    "Trained at Aliens Tattoo School, Mumbai",
+    "Tattoo studio in Roorkee",
+    "Book on WhatsApp · 63983 30495"
+  ]
+}
