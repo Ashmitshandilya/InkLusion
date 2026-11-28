@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>InkLusion highlight covers</title>
+<style>
+  @font-face { font-family: "Pirata"; src: url("../../reels/fonts/PirataOne-Regular.woff2") format("woff2"); }
+  html, body { margin: 0; background: #000; }
+  svg.cover { display: block; width: 1080px; height: 1920px; }
+</style>
+</head>
+<body>
+<script>
+// Tattoo-flash highlight covers. Art sits inside the centre circle (radius ~420) that Instagram shows.
+const CREAM = "#f4eef2", PINK = "#ff2bd6", DEEP = "#8a1675", INK = "#0b090c";
+const L = 'stroke="' + CREAM + '" stroke-linejoin="round" stroke-linecap="round"';
+
+function rand(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+
+function sparkle(x, y, s, fill = CREAM) {
+  return `<path d="M${x},${y - s} Q${x},${y} ${x + s},${y} Q${x},${y} ${x},${y + s} Q${x},${y} ${x - s},${y} Q${x},${y} ${x},${y - s}Z" fill="${fill}"/>`;
+}
+
+function banner(y, text, w, size = 80) {
+  const h = 112, x0 = -w / 2, x1 = w / 2, a = 26;
+  const tail = (s) => {
+    const xe = s * (w / 2), xo = s * (w / 2 + 110);
+    return `<path d="M${xe - s * 30},${y - h / 2 + 30} L${xo},${y - h / 2 + 38} L${xo - s * 42},${y + 16} L${xo},${y + h / 2 + 38} L${xe - s * 30},${y + h / 2 + 30}Z" fill="${DEEP}" ${L} stroke-width="8"/>
+            <path d="M${xe},${y + h / 2 - a + 4} L${xe - s * 30},${y + h / 2 + 30} L${xe - s * 30},${y + h / 2 - 12}Z" fill="${INK}" ${L} stroke-width="6"/>`;
+  };
+  return `${tail(-1)}${tail(1)}
+    <path d="M${x0},${y - h / 2} Q0,${y - h / 2 - a * 2} ${x1},${y - h / 2} L${x1},${y + h / 2 - a} Q0,${y + h / 2 - a * 3} ${x0},${y + h / 2 - a}Z" fill="${INK}" ${L} stroke-width="9"/>
+    <path id="bp${y}${text.length}" d="M${x0 + 20},${y + 14} Q0,${y + 14 - a * 2} ${x1 - 20},${y + 14}" fill="none"/>
+    <text font-family="Pirata" font-size="${size}" fill="${CREAM}" letter-spacing="3"><textPath href="#bp${y}${text.length}" startOffset="50%" text-anchor="middle">${text}</textPath></text>`;
+}
+
+function background(seed) {
+  const r = rand(seed);
+  let stars = "";
+  for (let i = 0; i < 240; i++) {
+    const x = -540 + r() * 1080, y = -960 + r() * 1920, s = [0.9, 1.2, 1.6, 2.2][Math.floor(r() * 4)];
+    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${s}" fill="#f0e4ff" opacity="${(0.25 + r() * 0.6).toFixed(2)}"/>`;
+  }
+  return `<rect x="-540" y="-960" width="1080" height="1920" fill="#050505"/>
+    <circle r="560" fill="url(#halo)"/>${stars}
+    <circle r="452" fill="none" stroke="${PINK}" stroke-width="2.5" opacity=".55"/>
+    <circle r="428" fill="none" stroke="${CREAM}" stroke-width="7" stroke-dasharray="0.1 21" stroke-linecap="round" opacity=".8"/>`;
+}
+
+// ---------------------------------------------------------------- 1. reviews: nautical star
+function nautical() {
+  const cy = -55, R = 250, r = 100;
+  const P = (rad, deg) => [rad * Math.cos(deg * Math.PI / 180), cy + rad * Math.sin(deg * Math.PI / 180)];
+  let s = "";
+  for (let i = 0; i < 5; i++) {
+    const tip = P(R, -90 + i * 72), inR = P(r, -54 + i * 72), inL = P(r, -126 + i * 72);
+    s += `<path d="M0,${cy} L${inL} L${tip}Z" fill="${PINK}" ${L} stroke-width="7"/>`;
+    s += `<path d="M0,${cy} L${tip} L${inR}Z" fill="${INK}" ${L} stroke-width="7"/>`;
+    s += `<path d="M0,${cy} L${tip} L${inR}Z" fill="url(#dots)" opacity=".8"/>`;
+  }
+  const outline = Array.from({ length: 10 }, (_, i) => P(i % 2 ? r : R, -90 + i * 36)).join(" L");
+  s += `<path d="M${outline}Z" fill="none" ${L} stroke-width="13"/>`;
+  s += `<circle cy="${cy}" r="10" fill="${CREAM}"/>`;
+  return s + sparkle(255, -290, 34) + sparkle(-262, -200, 22) + sparkle(-225, 115, 16, PINK) + banner(255, "reviews", 470);
+}
+
+// ---------------------------------------------------------------- 2. highlights: flash gem
+function gem() {
+  const yT = -205, yG = -85, cul = 205;
+  const T = [-120, -40, 40, 120].map(x => [x, yT]);
+  const G = [-245, -122, 0, 122, 245].map(x => [x, yG]);
+  const C = [0, cul];
+  const fills = [PINK, INK, "#ff86e8", INK, PINK, INK, "#ff86e8"];
+  const crown = [[G[0], T[0], G[1]], [T[0], T[1], G[1]], [G[1], T[1], G[2]], [T[1], T[2], G[2]],
+                 [G[2], T[2], G[3]], [T[2], T[3], G[3]], [G[3], T[3], G[4]]];
+  let s = "";
+  crown.forEach((t, i) => {
+    s += `<path d="M${t.join(" L")}Z" fill="${fills[i]}" ${L} stroke-width="7"/>`;
+    if (fills[i] === INK) s += `<path d="M${t.join(" L")}Z" fill="url(#dots)" opacity=".75"/>`;
+  });
+  const pav = [[G[0], G[1], C], [G[1], G[2], C], [G[2], G[3], C], [G[3], G[4], C]];
+  const pf = [DEEP, PINK, INK, DEEP];
+  pav.forEach((t, i) => {
+    s += `<path d="M${t.join(" L")}Z" fill="${pf[i]}" ${L} stroke-width="7"/>`;
+    if (pf[i] === INK) s += `<path d="M${t.join(" L")}Z" fill="url(#dots)" opacity=".75"/>`;
+  });
+  s += `<path d="M${[T[0], T[3], G[4], C, G[0]].join(" L")}Z" fill="none" ${L} stroke-width="13"/>`;
+  // shine
+  s += `<path d="M-200,-95 L-170,-95 L-112,40 L-128,48Z" fill="${CREAM}" opacity=".85"/>`;
+  s += `<path d="M-100,-193 L-80,-193 L-96,-120 L-112,-120Z" fill="${CREAM}" opacity=".85"/>`;
+  return s + sparkle(225, -265, 52) + sparkle(-250, -250, 26) + sparkle(255, 60, 20, PINK) + banner(285, "highlights", 540);
+}
+
+// ---------------------------------------------------------------- 3. FAQs: snake as a question mark
+function snake() {
+  const body = "M-150,-170 C-150,-335 170,-345 168,-170 C166,-60 18,-58 10,40";
+  let s = `<g transform="translate(0,-92) scale(0.8)">`;
+  // tail
+  s += `<path d="M-190,-172 C-194,-110 -168,-82 -118,-74 C-146,-100 -116,-128 -110,-172Z" fill="${INK}" ${L} stroke-width="8"/>`;
+  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="98" stroke-linecap="butt"/>`;
+  s += `<path d="${body}" fill="none" stroke="${INK}" stroke-width="80"/>`;
+  s += `<path d="${body}" fill="none" stroke="url(#dots)" stroke-width="80" opacity=".7"/>`;
+  s += `<path d="${body}" fill="none" stroke="${PINK}" stroke-width="80" stroke-dasharray="16 30"/>`;
+  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="5" stroke-dasharray="2 16" stroke-linecap="round" opacity=".9"/>`;
+  // head pointing down
+  s += `<path d="M-50,22 C-62,92 -24,146 10,158 C44,146 82,92 70,22 C40,6 -20,6 -50,22Z" fill="${INK}" ${L} stroke-width="10"/>`;
+  s += `<path d="M-30,40 C-20,70 40,70 50,40" fill="none" stroke="${PINK}" stroke-width="7" stroke-linecap="round"/>`;
+  s += `<ellipse cx="-16" cy="86" rx="13" ry="16" fill="${PINK}"/><ellipse cx="36" cy="86" rx="13" ry="16" fill="${PINK}"/>`;
+  s += `<rect x="-18" y="74" width="4" height="24" rx="2" fill="${INK}"/><rect x="34" y="74" width="4" height="24" rx="2" fill="${INK}"/>`;
+  s += `<path d="M10,160 L10,196 L-8,220 M10,196 L28,220" fill="none" stroke="${PINK}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
+  // the dot
+  s += `<circle cx="10" cy="300" r="46" fill="${INK}" ${L} stroke-width="10"/><circle cx="10" cy="300" r="46" fill="url(#dots)" opacity=".8"/>`;
+  s += `<circle cx="10" cy="300" r="20" fill="${PINK}"/>`;
+  s += `</g>`;
+  return s + sparkle(250, -230, 40) + sparkle(-255, 40, 22) + sparkle(200, 120, 16, PINK) + banner(300, "faqs", 380);
+}
+
+// ---------------------------------------------------------------- 4. DM: winged love letter
+function feather(len, ang, fill) {
+  const d = `M0,0 C30,-44 ${len - 70},-56 ${len},-22 C${len - 22},-8 ${len - 40},2 ${len - 52},4 C${len - 70},20 40,30 0,0Z`;
+  return `<g transform="rotate(${ang})"><path d="${d}" fill="${fill}" ${L} stroke-width="8"/>
+    ${fill === INK ? `<path d="${d}" fill="url(#dots)" opacity=".75"/>` : ""}
+    <path d="M14,0 C${len * 0.4},-8 ${len * 0.75},-12 ${len - 18},-12" fill="none" stroke="${CREAM}" stroke-width="4" stroke-linecap="round"/></g>`;
+}
+function letter() {
+  const wing = [[250, -6, PINK], [225, -24, INK], [195, -42, PINK], [160, -60, INK], [120, -78, PINK]].map(([l, a, f]) => feather(l, a, f)).join("");
+  let s = `<g transform="translate(140,-95)">${wing}</g><g transform="translate(-140,-95) scale(-1,1)">${wing}</g>`;
+  s += `<rect x="-165" y="-175" width="330" height="215" rx="14" fill="${INK}" ${L} stroke-width="11"/>`;
+  s += `<path d="M-165,-175 L-165,40 L-55,-52Z" fill="url(#dots)" opacity=".7"/>`;
+  s += `<path d="M-160,36 L-52,-55 M160,36 L52,-55" fill="none" ${L} stroke-width="6" opacity=".8"/>`;
+  s += `<path d="M-160,-170 L0,-52 L160,-170" fill="none" ${L} stroke-width="9"/>`;
+  s += `<g transform="translate(0,-62) scale(1.35)"><path d="M0,-12 C-10,-38 -50,-34 -48,-4 C-46,20 -15,34 0,50 C15,34 46,20 48,-4 C50,-34 10,-38 0,-12Z" fill="${PINK}" ${L} stroke-width="6"/>
+       <path d="M-30,-10 C-28,-20 -18,-22 -12,-18" fill="none" stroke="${CREAM}" stroke-width="5" stroke-linecap="round"/></g>`;
+  return s + sparkle(0, -285, 34) + sparkle(-265, 120, 20) + sparkle(270, 110, 24, PINK) + banner(225, "dm me", 400);
+}
+
+const covers = [["reviews", nautical, 3], ["highlights", gem, 7], ["faqs", snake, 11], ["dm-for-details", letter, 19]];
+for (const [name, art, seed] of covers) {
+  document.body.insertAdjacentHTML("beforeend", `
+  <svg class="cover" id="${name}" viewBox="-540 -960 1080 1920" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="halo"><stop offset="0" stop-color="${PINK}" stop-opacity=".22"/><stop offset=".55" stop-color="#5c2ef2" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+      <pattern id="dots" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="6.5" cy="6.5" r="2.4" fill="${CREAM}"/></pattern>
+      <filter id="neon" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="16" result="b"/>
+        <feFlood flood-color="${PINK}" flood-opacity=".75"/><feComposite in2="b" operator="in" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    ${background(seed)}
+    <g filter="url(#neon)">${art()}</g>
+  </svg>`);
+}
+</script>
+</body>
+</html>
