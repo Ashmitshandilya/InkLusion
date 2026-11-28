@@ -11,144 +11,146 @@
 </head>
 <body>
 <script>
-// Tattoo-flash highlight covers. Art sits inside the centre circle (radius ~420) that Instagram shows.
-const CREAM = "#f4eef2", PINK = "#ff2bd6", DEEP = "#8a1675", INK = "#0b090c";
-const L = 'stroke="' + CREAM + '" stroke-linejoin="round" stroke-linecap="round"';
-
-function rand(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
-
-function sparkle(x, y, s, fill = CREAM) {
-  return `<path d="M${x},${y - s} Q${x},${y} ${x + s},${y} Q${x},${y} ${x},${y + s} Q${x},${y} ${x - s},${y} Q${x},${y} ${x},${y - s}Z" fill="${fill}"/>`;
-}
+// Dark traditional flash: black & grey linework, stipple shading, small hits of pink. No glow.
+// Art sits inside the centre circle (radius ~420) that Instagram shows.
+const CREAM = "#ece6e3", GREY = "#77707a", PINK = "#ff2bd6", INK = "#0a090a";
+const L = (w) => `stroke="${CREAM}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const shade = (d) => `<path d="${d}" fill="url(#dots)"/>`;
 
 function banner(y, text, w, size = 80) {
   const h = 112, x0 = -w / 2, x1 = w / 2, a = 26;
   const tail = (s) => {
     const xe = s * (w / 2), xo = s * (w / 2 + 110);
-    return `<path d="M${xe - s * 30},${y - h / 2 + 30} L${xo},${y - h / 2 + 38} L${xo - s * 42},${y + 16} L${xo},${y + h / 2 + 38} L${xe - s * 30},${y + h / 2 + 30}Z" fill="${DEEP}" ${L} stroke-width="8"/>
-            <path d="M${xe},${y + h / 2 - a + 4} L${xe - s * 30},${y + h / 2 + 30} L${xe - s * 30},${y + h / 2 - 12}Z" fill="${INK}" ${L} stroke-width="6"/>`;
+    return `<path d="M${xe - s * 30},${y - h / 2 + 30} L${xo},${y - h / 2 + 38} L${xo - s * 42},${y + 16} L${xo},${y + h / 2 + 38} L${xe - s * 30},${y + h / 2 + 30}Z" fill="${INK}" ${L(8)}/>
+            ${shade(`M${xe - s * 30},${y - h / 2 + 30} L${xo},${y - h / 2 + 38} L${xo - s * 42},${y + 16} L${xo},${y + h / 2 + 38} L${xe - s * 30},${y + h / 2 + 30}Z`)}
+            <path d="M${xe},${y + h / 2 - a + 4} L${xe - s * 30},${y + h / 2 + 30} L${xe - s * 30},${y + h / 2 - 12}Z" fill="${INK}" ${L(6)}/>`;
   };
   return `${tail(-1)}${tail(1)}
-    <path d="M${x0},${y - h / 2} Q0,${y - h / 2 - a * 2} ${x1},${y - h / 2} L${x1},${y + h / 2 - a} Q0,${y + h / 2 - a * 3} ${x0},${y + h / 2 - a}Z" fill="${INK}" ${L} stroke-width="9"/>
+    <path d="M${x0},${y - h / 2} Q0,${y - h / 2 - a * 2} ${x1},${y - h / 2} L${x1},${y + h / 2 - a} Q0,${y + h / 2 - a * 3} ${x0},${y + h / 2 - a}Z" fill="${INK}" ${L(9)}/>
     <path id="bp${y}${text.length}" d="M${x0 + 20},${y + 14} Q0,${y + 14 - a * 2} ${x1 - 20},${y + 14}" fill="none"/>
     <text font-family="Pirata" font-size="${size}" fill="${CREAM}" letter-spacing="3"><textPath href="#bp${y}${text.length}" startOffset="50%" text-anchor="middle">${text}</textPath></text>`;
 }
 
-function background(seed) {
-  const r = rand(seed);
-  let stars = "";
-  for (let i = 0; i < 240; i++) {
-    const x = -540 + r() * 1080, y = -960 + r() * 1920, s = [0.9, 1.2, 1.6, 2.2][Math.floor(r() * 4)];
-    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${s}" fill="#f0e4ff" opacity="${(0.25 + r() * 0.6).toFixed(2)}"/>`;
-  }
-  return `<rect x="-540" y="-960" width="1080" height="1920" fill="#050505"/>
-    <circle r="560" fill="url(#halo)"/>${stars}
-    <circle r="452" fill="none" stroke="${PINK}" stroke-width="2.5" opacity=".55"/>
-    <circle r="428" fill="none" stroke="${CREAM}" stroke-width="7" stroke-dasharray="0.1 21" stroke-linecap="round" opacity=".8"/>`;
+function background() {
+  return `<rect x="-540" y="-960" width="1080" height="1920" fill="#070607"/>
+    <rect x="-540" y="-960" width="1080" height="1920" filter="url(#grain)" opacity=".05"/>
+    <circle r="560" fill="url(#halo)"/>
+    <circle r="448" fill="none" stroke="${CREAM}" stroke-width="3" opacity=".35"/>
+    <circle r="432" fill="none" stroke="${CREAM}" stroke-width="1.5" opacity=".2"/>`;
 }
 
-// ---------------------------------------------------------------- 1. reviews: nautical star
-function nautical() {
-  const cy = -55, R = 250, r = 100;
-  const P = (rad, deg) => [rad * Math.cos(deg * Math.PI / 180), cy + rad * Math.sin(deg * Math.PI / 180)];
-  let s = "";
-  for (let i = 0; i < 5; i++) {
-    const tip = P(R, -90 + i * 72), inR = P(r, -54 + i * 72), inL = P(r, -126 + i * 72);
-    s += `<path d="M0,${cy} L${inL} L${tip}Z" fill="${PINK}" ${L} stroke-width="7"/>`;
-    s += `<path d="M0,${cy} L${tip} L${inR}Z" fill="${INK}" ${L} stroke-width="7"/>`;
-    s += `<path d="M0,${cy} L${tip} L${inR}Z" fill="url(#dots)" opacity=".8"/>`;
-  }
-  const outline = Array.from({ length: 10 }, (_, i) => P(i % 2 ? r : R, -90 + i * 36)).join(" L");
-  s += `<path d="M${outline}Z" fill="none" ${L} stroke-width="13"/>`;
-  s += `<circle cy="${cy}" r="10" fill="${CREAM}"/>`;
-  return s + sparkle(255, -290, 34) + sparkle(-262, -200, 22) + sparkle(-225, 115, 16, PINK) + banner(255, "reviews", 470);
+// ---------------------------------------------------------------- 1. reviews: skull & crossbones
+function bone(angle) {
+  const k = (x, y) => `<circle cx="${x}" cy="${y}" r="24" fill="${INK}" ${L(8)}/>`;
+  return `<g transform="rotate(${angle})">
+    ${k(-250, -20)}${k(-250, 20)}${k(250, -20)}${k(250, 20)}
+    <rect x="-252" y="-22" width="504" height="44" rx="10" fill="${INK}" ${L(8)}/>
+    <rect x="-262" y="-12" width="524" height="24" fill="${INK}"/>
+    ${shade("M-230,6 L230,6 L230,22 L-230,22Z")}
+  </g>`;
+}
+function skull() {
+  let s = `<g transform="translate(0,-40)">${bone(32)}${bone(-32)}`;
+  const cranium = "M-150,-70 C-150,-270 150,-270 150,-70 C150,-10 122,14 112,48 L98,92 L-98,92 L-112,48 C-122,14 -150,-10 -150,-70Z";
+  s += `<path d="${cranium}" fill="${INK}" ${L(11)}/>`;
+  s += shade("M-150,-70 C-150,-170 -110,-220 -60,-238 C-110,-190 -124,-120 -112,-40 C-104,10 -112,40 -112,48 C-122,14 -150,-10 -150,-70Z");
+  s += shade("M150,-70 C150,-170 110,-220 60,-238 C110,-190 124,-120 112,-40 C104,10 112,40 112,48 C122,14 150,-10 150,-70Z");
+  s += `<path d="M30,-252 L18,-210 L40,-188 L26,-150" fill="none" ${L(5)}/>`;
+  // jaw + teeth
+  s += `<path d="M-88,96 L88,96 L78,164 C52,192 -52,192 -78,164Z" fill="${INK}" ${L(10)}/>`;
+  s += shade("M-78,164 C-52,192 52,192 78,164 L80,150 L-80,150Z");
+  s += `<path d="M-84,124 L84,124" ${L(6)}/>`;
+  for (let x = -60; x <= 60; x += 24) s += `<path d="M${x},96 L${x},150" ${L(5)}/>`;
+  // sockets with pink eyes, nose
+  s += `<path d="M-108,-62 C-108,-122 -26,-124 -24,-60 C-22,-12 -108,-4 -108,-62Z" fill="#000" ${L(8)}/>`;
+  s += `<path d="M108,-62 C108,-122 26,-124 24,-60 C22,-12 108,-4 108,-62Z" fill="#000" ${L(8)}/>`;
+  s += `<circle cx="-62" cy="-58" r="13" fill="${PINK}"/><circle cx="62" cy="-58" r="13" fill="${PINK}"/>`;
+  s += `<path d="M0,-6 L-24,44 C-10,36 10,36 24,44Z" fill="#000" ${L(7)}/>`;
+  s += `</g>`;
+  return s + banner(265, "reviews", 470);
 }
 
-// ---------------------------------------------------------------- 2. highlights: flash gem
-function gem() {
-  const yT = -205, yG = -85, cul = 205;
-  const T = [-120, -40, 40, 120].map(x => [x, yT]);
-  const G = [-245, -122, 0, 122, 245].map(x => [x, yG]);
-  const C = [0, cul];
-  const fills = [PINK, INK, "#ff86e8", INK, PINK, INK, "#ff86e8"];
-  const crown = [[G[0], T[0], G[1]], [T[0], T[1], G[1]], [G[1], T[1], G[2]], [T[1], T[2], G[2]],
-                 [G[2], T[2], G[3]], [T[2], T[3], G[3]], [G[3], T[3], G[4]]];
-  let s = "";
-  crown.forEach((t, i) => {
-    s += `<path d="M${t.join(" L")}Z" fill="${fills[i]}" ${L} stroke-width="7"/>`;
-    if (fills[i] === INK) s += `<path d="M${t.join(" L")}Z" fill="url(#dots)" opacity=".75"/>`;
-  });
-  const pav = [[G[0], G[1], C], [G[1], G[2], C], [G[2], G[3], C], [G[3], G[4], C]];
-  const pf = [DEEP, PINK, INK, DEEP];
-  pav.forEach((t, i) => {
-    s += `<path d="M${t.join(" L")}Z" fill="${pf[i]}" ${L} stroke-width="7"/>`;
-    if (pf[i] === INK) s += `<path d="M${t.join(" L")}Z" fill="url(#dots)" opacity=".75"/>`;
-  });
-  s += `<path d="M${[T[0], T[3], G[4], C, G[0]].join(" L")}Z" fill="none" ${L} stroke-width="13"/>`;
-  // shine
-  s += `<path d="M-200,-95 L-170,-95 L-112,40 L-128,48Z" fill="${CREAM}" opacity=".85"/>`;
-  s += `<path d="M-100,-193 L-80,-193 L-96,-120 L-112,-120Z" fill="${CREAM}" opacity=".85"/>`;
-  return s + sparkle(225, -265, 52) + sparkle(-250, -250, 26) + sparkle(255, 60, 20, PINK) + banner(285, "highlights", 540);
+// ---------------------------------------------------------------- 2. highlights: dagger
+function dagger() {
+  let s = `<g transform="translate(0,-78)">`;
+  s += `<circle cx="0" cy="-318" r="30" fill="${INK}" ${L(9)}/>`;
+  s += shade("M-20,-318 A20,20 0 0,0 20,-318Z");
+  s += `<rect x="-28" y="-292" width="56" height="128" rx="8" fill="${INK}" ${L(9)}/>`;
+  for (let y = -278; y < -170; y += 22) s += `<path d="M-26,${y + 16} L26,${y}" ${L(5)}/>`;
+  s += `<path d="M-150,-168 C-128,-190 -60,-176 0,-178 C60,-176 128,-190 150,-168 C128,-142 60,-150 0,-146 C-60,-150 -128,-142 -150,-168Z" fill="${INK}" ${L(9)}/>`;
+  s += `<circle cx="-158" cy="-168" r="18" fill="${INK}" ${L(8)}/><circle cx="158" cy="-168" r="18" fill="${INK}" ${L(8)}/>`;
+  s += `<circle cx="0" cy="-162" r="16" fill="${PINK}" ${L(6)}/>`;
+  const blade = "M-46,-140 L46,-140 L4,232 L-4,232Z";
+  s += `<path d="${blade}" fill="${INK}" ${L(10)}/>`;
+  s += shade("M-46,-140 L0,-140 L0,232 L-4,232Z");
+  s += `<path d="M0,-136 L0,200" ${L(5)}/>`;
+  // a drop of pink
+  s += `<path d="M4,232 C4,250 -14,262 -14,280 C-14,296 22,296 22,280 C22,262 4,250 4,232Z" fill="${PINK}" ${L(6)}/>`;
+  s += `</g>`;
+  return s + banner(300, "highlights", 540);
 }
 
-// ---------------------------------------------------------------- 3. FAQs: snake as a question mark
+// ---------------------------------------------------------------- 3. FAQs: fanged snake as a question mark
 function snake() {
   const body = "M-150,-170 C-150,-335 170,-345 168,-170 C166,-60 18,-58 10,40";
   let s = `<g transform="translate(0,-92) scale(0.8)">`;
-  // tail
-  s += `<path d="M-190,-172 C-194,-110 -168,-82 -118,-74 C-146,-100 -116,-128 -110,-172Z" fill="${INK}" ${L} stroke-width="8"/>`;
-  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="98" stroke-linecap="butt"/>`;
+  s += `<path d="M-190,-172 C-194,-110 -168,-82 -118,-74 C-146,-100 -116,-128 -110,-172Z" fill="${INK}" ${L(8)}/>`;
+  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="98"/>`;
   s += `<path d="${body}" fill="none" stroke="${INK}" stroke-width="80"/>`;
-  s += `<path d="${body}" fill="none" stroke="url(#dots)" stroke-width="80" opacity=".7"/>`;
-  s += `<path d="${body}" fill="none" stroke="${PINK}" stroke-width="80" stroke-dasharray="16 30"/>`;
-  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="5" stroke-dasharray="2 16" stroke-linecap="round" opacity=".9"/>`;
-  // head pointing down
-  s += `<path d="M-50,22 C-62,92 -24,146 10,158 C44,146 82,92 70,22 C40,6 -20,6 -50,22Z" fill="${INK}" ${L} stroke-width="10"/>`;
-  s += `<path d="M-30,40 C-20,70 40,70 50,40" fill="none" stroke="${PINK}" stroke-width="7" stroke-linecap="round"/>`;
-  s += `<ellipse cx="-16" cy="86" rx="13" ry="16" fill="${PINK}"/><ellipse cx="36" cy="86" rx="13" ry="16" fill="${PINK}"/>`;
-  s += `<rect x="-18" y="74" width="4" height="24" rx="2" fill="${INK}"/><rect x="34" y="74" width="4" height="24" rx="2" fill="${INK}"/>`;
-  s += `<path d="M10,160 L10,196 L-8,220 M10,196 L28,220" fill="none" stroke="${PINK}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
-  // the dot
-  s += `<circle cx="10" cy="300" r="46" fill="${INK}" ${L} stroke-width="10"/><circle cx="10" cy="300" r="46" fill="url(#dots)" opacity=".8"/>`;
-  s += `<circle cx="10" cy="300" r="20" fill="${PINK}"/>`;
+  s += `<path d="${body}" fill="none" stroke="url(#dots)" stroke-width="80"/>`;
+  s += `<path d="${body}" fill="none" stroke="${INK}" stroke-width="80" stroke-dasharray="18 28"/>`;
+  s += `<path d="${body}" fill="none" stroke="${CREAM}" stroke-width="4" stroke-dasharray="18 28" stroke-dashoffset="-18" opacity=".7"/>`;
+  // head: wedge, brows, fangs
+  s += `<path d="M-56,18 C-70,92 -28,150 10,164 C48,150 90,92 76,18 C44,0 -24,0 -56,18Z" fill="${INK}" ${L(10)}/>`;
+  s += shade("M-56,18 C-70,92 -28,150 10,164 C-20,130 -40,80 -34,20Z");
+  s += `<path d="M-40,52 L-2,70 M60,52 L22,70" ${L(7)}/>`;
+  s += `<ellipse cx="-16" cy="86" rx="12" ry="14" fill="${PINK}"/><ellipse cx="36" cy="86" rx="12" ry="14" fill="${PINK}"/>`;
+  s += `<rect x="-18" y="76" width="4" height="20" rx="2" fill="${INK}"/><rect x="34" y="76" width="4" height="20" rx="2" fill="${INK}"/>`;
+  s += `<path d="M-10,142 L-4,176 L2,146 M18,146 L24,176 L30,142" fill="${CREAM}" ${L(4)}/>`;
+  s += `<path d="M10,164 L10,200 L-6,222 M10,200 L26,222" fill="none" stroke="${PINK}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`;
+  // the dot: a little skull
+  s += `<g transform="translate(10,300)"><path d="M-44,0 C-44,-60 44,-60 44,0 C44,22 30,30 28,44 L-28,44 C-30,30 -44,22 -44,0Z" fill="${INK}" ${L(8)}/>
+       <circle cx="-17" cy="0" r="12" fill="#000" ${L(5)}/><circle cx="17" cy="0" r="12" fill="#000" ${L(5)}/>
+       <path d="M-12,44 L-12,56 M0,44 L0,56 M12,44 L12,56" ${L(5)}/></g>`;
   s += `</g>`;
-  return s + sparkle(250, -230, 40) + sparkle(-255, 40, 22) + sparkle(200, 120, 16, PINK) + banner(300, "faqs", 380);
+  return s + banner(300, "faqs", 380);
 }
 
-// ---------------------------------------------------------------- 4. DM: winged love letter
-function feather(len, ang, fill) {
-  const d = `M0,0 C30,-44 ${len - 70},-56 ${len},-22 C${len - 22},-8 ${len - 40},2 ${len - 52},4 C${len - 70},20 40,30 0,0Z`;
-  return `<g transform="rotate(${ang})"><path d="${d}" fill="${fill}" ${L} stroke-width="8"/>
-    ${fill === INK ? `<path d="${d}" fill="url(#dots)" opacity=".75"/>` : ""}
-    <path d="M14,0 C${len * 0.4},-8 ${len * 0.75},-12 ${len - 18},-12" fill="none" stroke="${CREAM}" stroke-width="4" stroke-linecap="round"/></g>`;
+// ---------------------------------------------------------------- 4. DM: bat carrying a letter
+function batWing() {
+  const w = "M34,-96 C120,-210 262,-200 334,-138 C304,-114 294,-82 304,-48 C264,-70 232,-62 218,-30 C188,-62 152,-56 132,-20 C110,-52 70,-52 40,-22Z";
+  return `<path d="${w}" fill="${INK}" ${L(9)}/>
+    ${shade("M34,-96 C120,-210 262,-200 334,-138 C250,-150 150,-130 34,-60Z")}
+    <path d="M40,-80 L304,-48 M40,-80 L218,-30 M40,-80 L132,-20 M40,-80 L250,-170" fill="none" ${L(5)}/>`;
 }
-function letter() {
-  const wing = [[250, -6, PINK], [225, -24, INK], [195, -42, PINK], [160, -60, INK], [120, -78, PINK]].map(([l, a, f]) => feather(l, a, f)).join("");
-  let s = `<g transform="translate(140,-95)">${wing}</g><g transform="translate(-140,-95) scale(-1,1)">${wing}</g>`;
-  s += `<rect x="-165" y="-175" width="330" height="215" rx="14" fill="${INK}" ${L} stroke-width="11"/>`;
-  s += `<path d="M-165,-175 L-165,40 L-55,-52Z" fill="url(#dots)" opacity=".7"/>`;
-  s += `<path d="M-160,36 L-52,-55 M160,36 L52,-55" fill="none" ${L} stroke-width="6" opacity=".8"/>`;
-  s += `<path d="M-160,-170 L0,-52 L160,-170" fill="none" ${L} stroke-width="9"/>`;
-  s += `<g transform="translate(0,-62) scale(1.35)"><path d="M0,-12 C-10,-38 -50,-34 -48,-4 C-46,20 -15,34 0,50 C15,34 46,20 48,-4 C50,-34 10,-38 0,-12Z" fill="${PINK}" ${L} stroke-width="6"/>
-       <path d="M-30,-10 C-28,-20 -18,-22 -12,-18" fill="none" stroke="${CREAM}" stroke-width="5" stroke-linecap="round"/></g>`;
-  return s + sparkle(0, -285, 34) + sparkle(-265, 120, 20) + sparkle(270, 110, 24, PINK) + banner(225, "dm me", 400);
+function bat() {
+  let s = `<g transform="translate(0,-60)">${batWing()}<g transform="scale(-1,1)">${batWing()}</g>`;
+  s += `<path d="M-46,-110 L-58,-200 L-18,-150 C-6,-156 6,-156 18,-150 L58,-200 L46,-110 C66,-70 56,20 0,40 C-56,20 -66,-70 -46,-110Z" fill="${INK}" ${L(10)}/>`;
+  s += shade("M-46,-110 C-66,-70 -56,20 0,40 C-30,10 -40,-60 -22,-120Z");
+  s += `<path d="M-30,-118 L-8,-106 M30,-118 L8,-106" ${L(6)}/>`;
+  s += `<ellipse cx="-20" cy="-96" rx="10" ry="12" fill="${PINK}"/><ellipse cx="20" cy="-96" rx="10" ry="12" fill="${PINK}"/>`;
+  s += `<path d="M-14,-62 L-8,-40 L-2,-62 M2,-62 L8,-40 L14,-62" fill="${CREAM}" ${L(4)}/>`;
+  // feet + letter
+  s += `<path d="M-16,36 L-26,62 M16,36 L26,62" ${L(7)}/>`;
+  s += `<rect x="-110" y="60" width="220" height="140" rx="10" fill="${INK}" ${L(9)}/>`;
+  s += `<path d="M-106,64 L0,138 L106,64" fill="none" ${L(7)}/>`;
+  s += shade("M-106,196 L-30,120 L0,138 L30,120 L106,196Z");
+  s += `<circle cx="0" cy="138" r="20" fill="${PINK}" ${L(6)}/>`;
+  s += `</g>`;
+  return s + banner(255, "dm me", 400);
 }
 
-const covers = [["reviews", nautical, 3], ["highlights", gem, 7], ["faqs", snake, 11], ["dm-for-details", letter, 19]];
-for (const [name, art, seed] of covers) {
+const covers = [["reviews", skull], ["highlights", dagger], ["faqs", snake], ["dm-for-details", bat]];
+for (const [name, art] of covers) {
   document.body.insertAdjacentHTML("beforeend", `
   <svg class="cover" id="${name}" viewBox="-540 -960 1080 1920" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="halo"><stop offset="0" stop-color="${PINK}" stop-opacity=".22"/><stop offset=".55" stop-color="#5c2ef2" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
-      <pattern id="dots" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="6.5" cy="6.5" r="2.4" fill="${CREAM}"/></pattern>
-      <filter id="neon" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="16" result="b"/>
-        <feFlood flood-color="${PINK}" flood-opacity=".75"/><feComposite in2="b" operator="in" result="g"/>
-        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
+      <radialGradient id="halo"><stop offset="0" stop-color="#2a1626" stop-opacity=".9"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+      <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2.3" fill="${GREY}"/></pattern>
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
     </defs>
-    ${background(seed)}
-    <g filter="url(#neon)">${art()}</g>
+    ${background()}
+    ${art()}
   </svg>`);
 }
 </script>
