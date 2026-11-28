@@ -71,7 +71,7 @@ def word_layer(word, cy):
     n = cv2.resize(rng.random((48, 27)).astype(np.float32), (W, H), interpolation=cv2.INTER_CUBIC)
     n = cv2.GaussianBlur(n, (0, 0), 25)
     n = (n - n.min()) / (n.max() - n.min() + 1e-9)
-    tone = 0.18 + 0.22 * n  # dim, uneven grey
+    tone = 0.24 + 0.26 * n  # dim, uneven grey
     rgb = np.dstack([tone * 235, tone * 228, tone * 232]) * m[..., None]
     glow = cv2.GaussianBlur(m, (0, 0), 30)[..., None] * np.array(PINK, np.float32)[None, None] * 0.22
     edge = cv2.GaussianBlur(m, (0, 0), 1.2)
@@ -87,7 +87,7 @@ def compose(art_path, word, out):
         outside = np.hypot(xx - w / 2, yy - h / 2) > min(h, w) / 2 - 2
         art[outside] = 0
     art = grade(art)
-    side = 1000
+    side = 860
     art = cv2.resize(art, (side, side), interpolation=cv2.INTER_LANCZOS4 if art.shape[0] < side else cv2.INTER_AREA)
     mask = subject_mask(art)
 
@@ -99,7 +99,7 @@ def compose(art_path, word, out):
     word_rgb, wm, _ = word_layer(word, H / 2 + 250)
     canvas = canvas * (1 - wm[..., None] * 0.9) + word_rgb
 
-    x0, y0 = (W - side) // 2, (H - side) // 2 - 60
+    x0, y0 = (W - side) // 2, (H - side) // 2 - 50
     reg = canvas[y0:y0 + side, x0:x0 + side]
     m = mask[..., None]
     canvas[y0:y0 + side, x0:x0 + side] = reg * (1 - m) + art.astype(np.float32) * m
